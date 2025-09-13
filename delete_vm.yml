@@ -1,0 +1,50 @@
+# This pipeline shows how to:
+# - Provision an Azure VM and register the VM in an Azure Pipelines environment.
+# - Run a task like InstallNetCoreRuntimeAndHosting on the provisioned VM.
+# - Remove the used Azure Pipelines environment and provisioned Azure resource group.
+#
+# The following variables need to be provided to the pipeline:
+# - token           : a Personal Access Token with the scopes 'Environment (Read & manage)' and 'Tokens (Read & manage)'.
+# - adminPassword   : a password for the admin user of the virtual machine.
+#
+# This pipeline also expects an Azure (Resource Manager) service connection in Azure DevOps with the name 'Azure Visual Studio Enterprise'.
+
+
+trigger: none
+pr: none
+
+pool:
+  name: easec-pool
+  
+variables:
+  environmentName: "provision-vm-example-${{ variables['Build.SourceVersion'] }}"
+  adminPassword: "Password12345!"
+  resourceGroupName: "snapshot-rg"
+  snapshotName: "easec-vm_OsDisk_1_snap"
+  snapshotNameData: "easec-vm_DataDisk_0_snap"
+  osDiskName: "easec-vm_OsDisk_1_man"
+  dataDiskName: "easec-vm_DataDisk_1_man"
+  diskSizeOs: 128
+  diskSizeData: 1024
+  storageType: "Premium_LRS"
+  osType: "windows"
+  virtualMachineName: "easec-vm"
+
+stages:
+- stage: Provision
+  jobs:
+  - job:
+    steps:
+     - task: AzureCLI@2
+       inputs:
+         azureSubscription: 'MyAzureServiceConnection'
+         scriptType: pscore
+         scriptLocation: inlineScript
+         inlineScript: |
+          $snapshotId = az snapshot show --name "$(snapshotName)" --resource-group "$(resourceGroupName)" --query "id" -o tsv
+          Write-Host "Snapshot ID: $snapshotId"
+          $snapshotIdData = az snapshot show --name "$(snapshotNameData)" --resource-group "$(resourceGroupName)" --query "id" -o tsv
+          Write-Host "Snapshot ID: $snapshotIdData"
+          az disk create --resource-group "$(resourceGroupName)" --name "$(osDiskName)" --sku "$(storageType)" --size-gb "$(diskSizeOs)" --source $snapshotId
+          az disk create --resource-group "$(resourceGroupName)" --name "$(dataDiskName)" --sku "$(storageType)" --size-gb "$(diskSizeData)" --source $snapshotIdData
+          az vm create --name "$(virtualMachineName)" --resource-group "$(resourceGroupName)" --os-type "$(osType)" --size 'Standard_D2s_v5' --attach-os-disk "$(osDiskName)" --attach-data-disks "$(dataDiskName)"
