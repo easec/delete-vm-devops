@@ -35,5 +35,7 @@ stages:
           Write-Host "VM $(virtualMachineName) in Resource Group $(resourceGroupName) has been stopped."
           az vm deallocate --name $(virtualMachineName) --resource-group $(resourceGroupName)
           Write-Host "VM $(virtualMachineName) in Resource Group $(resourceGroupName) has been deallocated."
-          az resource delete --ids $(az resource list --resource-group "$(resourceGroupName)") --query "[].id" -o tsv
-          Write-Host "VM $(virtualMachineName) in Resource Group $(resourceGroupName) has been deleted."
+          az resource list --resource-group $(resourceGroupName) 
+               | ConvertFrom-Json
+               | Sort-Object @{Expression = {$resourceOrderRemovalOrder[$_.type]}; Descending = $False}
+               | ForEach-Object {az resource delete --resource-group $(resourceGroupName) --ids $_.id --verbose}
