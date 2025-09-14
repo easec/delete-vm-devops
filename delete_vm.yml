@@ -38,3 +38,6 @@ stages:
           az resource list --resource-group "snapshot-rg" 
               | ConvertFrom-Json
                   | Foreach-Object {az resource delete --resource-group "snapshot-rg" --ids $_.id --verbose}
+          az network public-ip delete --resource-group "snapshot-rg" --name easec-vmPublicIP
+          az network vnet delete --resource-group "snapshot-rg" --name easec-vmVNET
+          az network nsg delete --resource-group "snapshot-rg" --name easec-vmNSG
