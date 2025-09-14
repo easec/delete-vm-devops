@@ -35,4 +35,4 @@ stages:
           Write-Host "VM $(virtualMachineName) in Resource Group $(resourceGroupName) has been stopped."
           Write-Host "Snapshot ID: $snapshotId"
           az vm deallocate --name $virtualMachineName --resource-group $resourceGroupName"
-          Write-Host "VM $virtualMachineName in Resource Group $resourceGroupName has been deallocated."
+          Write-Host 'VM $(virtualMachineName) in Resource Group $(resourceGroupName) has been deallocated.'
