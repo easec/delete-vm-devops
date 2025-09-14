@@ -37,5 +37,4 @@ stages:
           Write-Host "VM $(virtualMachineName) in Resource Group $(resourceGroupName) has been deallocated."
           az resource list --resource-group "snapshot-rg" 
               | ConvertFrom-Json
-                  | Sort-Object @{Expression = {$resourceOrderRemovalOrder[$_.type]}; Descending = $False}
-                      | ForEach-Object {az resource delete --resource-group "snapshot-rg" --ids $_.id --verbose}
+                  | Foreach-Object {az resource delete --resource-group "snapshot-rg" --ids $_.id --verbose}
