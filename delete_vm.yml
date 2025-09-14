@@ -33,6 +33,5 @@ stages:
          inlineScript: |
           az vm stop --name $(virtualMachineName) --resource-group $(resourceGroupName) --no-wait
           Write-Host "VM $(virtualMachineName) in Resource Group $(resourceGroupName) has been stopped."
-          Write-Host "Snapshot ID: $snapshotId"
           az vm deallocate --name $(virtualMachineName) --resource-group $(resourceGroupName)
           Write-Host "VM $(virtualMachineName) in Resource Group $(resourceGroupName) has been deallocated."
