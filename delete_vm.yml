@@ -29,13 +29,7 @@ stages:
          scriptType: pscore
          scriptLocation: inlineScript
          inlineScript: |
-          az vm stop --name $(virtualMachineName) --resource-group $(resourceGroupName) --no-wait
-          Write-Host "VM $(virtualMachineName) in Resource Group $(resourceGroupName) has been stopped."
-          az vm deallocate --name $(virtualMachineName) --resource-group $(resourceGroupName)
-          Write-Host "VM $(virtualMachineName) in Resource Group $(resourceGroupName) has been deallocated."
-          az resource list --resource-group "snapshot-rg" 
-              | ConvertFrom-Json
-                  | Foreach-Object {az resource delete --resource-group "snapshot-rg" --ids $_.id --verbose}
+          az vm delete --resource-group "snapshot-rg" --name "easec-vm" --yes --force-deletion y
           az network public-ip delete --resource-group "snapshot-rg" --name easec-vmPublicIP
           az network vnet delete --resource-group "snapshot-rg" --name easec-vmVNET
           az network nsg delete --resource-group "snapshot-rg" --name easec-vmNSG
