@@ -30,6 +30,7 @@ stages:
          scriptLocation: inlineScript
          inlineScript: |
           az vm delete --resource-group "snapshot-rg" --name "easec-vm" --yes --force-deletion y
+          az network nic ip-config update --name ipconfigeasec-vm --resource-group "snapshot-rg" --nic-name easec-vmVMNic --public-ip-address null
           az network public-ip delete --resource-group "snapshot-rg" --name easec-vmPublicIP
           az network vnet delete --resource-group "snapshot-rg" --name easec-vmVNET
           az network nsg delete --resource-group "snapshot-rg" --name easec-vmNSG
