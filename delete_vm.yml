@@ -1,13 +1,11 @@
-# This pipeline shows how to:
-# - Provision an Azure VM and register the VM in an Azure Pipelines environment.
-# - Run a task like InstallNetCoreRuntimeAndHosting on the provisioned VM.
-# - Remove the used Azure Pipelines environment and provisioned Azure resource group.
+# This pipeline will delete all resources in Resource Group defined in the variable resourceGroupName.
+
 #
 # The following variables need to be provided to the pipeline:
-# - token           : a Personal Access Token with the scopes 'Environment (Read & manage)' and 'Tokens (Read & manage)'.
-# - adminPassword   : a password for the admin user of the virtual machine.
+# - resourceGroupName            : name for the Resource Group where the vm will be created.
+# - virtualMachineName           : name for the virtual machine.
 #
-# This pipeline also expects an Azure (Resource Manager) service connection in Azure DevOps with the name 'Azure Visual Studio Enterprise'.
+# This pipeline also expects an Azure (Resource Manager) service connection in Azure DevOps with the name 'AzureServiceConnection'.
 
 
 trigger: none
