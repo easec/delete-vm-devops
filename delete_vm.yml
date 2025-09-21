@@ -40,7 +40,7 @@ stages:
           Write-Host "NIC: $vmNic"
           $nicName = az network nic list --resource-group "$(resourceGroupName)" --query "[?contains(name, $(virtualMachineName))].name"
           Write-Host "NICname: $nicName"
-          $VM = Get-AzVM -Name "$(virtualMachineName) -ResourceGroupName "$(resourceGroupName)"
+          $VM = Get-AzVM -Name "$(virtualMachineName)" -ResourceGroupName "$(resourceGroupName)"
           $oldNics = $VM.NetworkProfile.NetworkInterfaces
           Write-Host "NIC: $oldNics"
           az vm delete --resource-group "$(resourceGroupName)" --name "$(virtualMachineName)" --yes --force-deletion y
