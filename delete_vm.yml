@@ -4,6 +4,8 @@
 # The following variables need to be provided to the pipeline:
 # - resourceGroupName            : name for the Resource Group where the vm will be created.
 # - virtualMachineName           : name for the virtual machine.
+# - osDiskName                   : Name for Managed Disk containing the OS.
+# - dataDiskName                 : Name for Managed Disk containing the data.
 #
 # This pipeline also expects an Azure (Resource Manager) service connection in Azure DevOps with the name 'AzureServiceConnection'.
 
@@ -17,6 +19,11 @@ pool:
 variables:
   resourceGroupName: "snapshot-rg"
   virtualMachineName: "easec-vm"
+  vmNIC: "easec-vmVMNic"
+  vmNSG: "easec-vmNSG"
+  vmVNET: "easec-vmVNET"
+  osDiskName: "easec-vm_OsDisk_1_man"
+  dataDiskName: "easec-vm_DataDisk_1_man"
 
 stages:
 - stage: Provision
@@ -29,15 +36,13 @@ stages:
          scriptType: pscore
          scriptLocation: inlineScript
          inlineScript: |
-          $vmNic = az vm nic list --resource-group "$(resourceGroupName)" --vm-name $(virtualMachineName)
+          $vmNic = az vm nic list --resource-group "$(resourceGroupName)" --vm-name "$(virtualMachineName)"
           Write-Host "NIC: $vmNic"
-          az vm delete --resource-group "$(resourceGroupName)" --name $(virtualMachineName) --yes --force-deletion y
-          az disk delete --name "easec-vm_OsDisk_1_man" --resource-group "$(resourceGroupName)" --yes
-          az disk delete --name "easec-vm_DataDisk_1_man" --resource-group "$(resourceGroupName)" --yes
-          az network nic ip-config update --name ipconfigeasec-vm --resource-group "$(resourceGroupName)" --nic-name easec-vmVMNic --public-ip-address null
+          az vm delete --resource-group "$(resourceGroupName)" --name "$(virtualMachineName)" --yes --force-deletion y
+          az network nic ip-config update --name ipconfigeasec-vm --resource-group "$(resourceGroupName)" --nic-name "$(vmNIC)" --public-ip-address null
           az network public-ip delete --resource-group "$(resourceGroupName)" --name easec-vmPublicIP
-          az network nic delete --resource-group "$(resourceGroupName)" --name "easec-vmVMNic"
-          az network nsg delete --resource-group "$(resourceGroupName)" --name easec-vmNSG
-          az network vnet delete --resource-group "$(resourceGroupName)" --name easec-vmVNET
-          az disk delete --name "easec-vm_OsDisk_1_man" --resource-group "$(resourceGroupName)" --yes
-          az disk delete --name "easec-vm_DataDisk_1_man" --resource-group "$(resourceGroupName)" --yes 
+          az network nic delete --resource-group "$(resourceGroupName)" --name "$(vmNIC)"
+          az network nsg delete --resource-group "$(resourceGroupName)" --name "$(vmNSG)" 
+          az network vnet delete --resource-group "$(resourceGroupName)" --name "$(vmVNET)" 
+          az disk delete --name "$(osDiskName)" --resource-group "$(resourceGroupName)" --yes
+          az disk delete --name "$(dataDiskName)" --resource-group "$(resourceGroupName)" --yes 
