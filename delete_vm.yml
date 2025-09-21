@@ -38,6 +38,9 @@ stages:
          inlineScript: |
           $vmNic = az vm nic list --resource-group "$(resourceGroupName)" --vm-name "$(virtualMachineName)"
           Write-Host "NIC: $vmNic"
+          $virtualNetwork = Get-AzResource -ResourceId $vNetResourceId -ExpandProperties
+          $mySubnet = Get-AzVirtualNetwork -Name $virtualNetwork.Name | Select-Object -ExpandProperty subnets | Where-Object Name -eq 'mysubnet'
+          Write-Host "Subnet: $mySubnet"
           az vm delete --resource-group "$(resourceGroupName)" --name "$(virtualMachineName)" --yes --force-deletion y
           az network nic ip-config update --name ipconfigeasec-vm --resource-group "$(resourceGroupName)" --nic-name "$(vmNIC)" --public-ip-address null
           az network public-ip delete --resource-group "$(resourceGroupName)" --name easec-vmPublicIP
