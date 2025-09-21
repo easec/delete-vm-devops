@@ -49,5 +49,5 @@ stages:
           az network nic delete --resource-group "$(resourceGroupName)" --name "$(vmNIC)"
           az network nsg delete --resource-group "$(resourceGroupName)" --name "$(vmNSG)" 
           az network vnet delete --resource-group "$(resourceGroupName)" --name "$(vmVNET)" 
-          az disk delete --name "$(osDiskName)" --resource-group "$(resourceGroupName)" --yes
-          az disk delete --name "$(dataDiskName)" --resource-group "$(resourceGroupName)" --yes 
+          az disk delete --name "$(osDiskName)" --resource-group "$(resourceGroupName)"
+          az disk delete --name "$(dataDiskName)" --resource-group "$(resourceGroupName)"
