@@ -40,8 +40,6 @@ stages:
           Write-Host "NIC: $vmNic"
           $nicName = az network nic list --resource-group "$(resourceGroupName)" '''--query "[?contains(name, 'easec'].name"
           Write-Host "NICname: $nicName"
-          $oldNics = az vm show --name "$(virtualMachineName)" --resource-group "$(resourceGroupName)" --query 'networkProfile.networkInterfaces[].id' -o tsv
-          Write-Host "oldNics: $oldNics"
           az vm delete --resource-group "$(resourceGroupName)" --name "$(virtualMachineName)" --yes --force-deletion y
           az network nic ip-config update --name ipconfigeasec-vm --resource-group "$(resourceGroupName)" --nic-name "$(vmNIC)" --public-ip-address null
           az network public-ip delete --resource-group "$(resourceGroupName)" --name easec-vmPublicIP
