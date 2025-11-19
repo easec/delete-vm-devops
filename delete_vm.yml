@@ -48,3 +48,15 @@ stages:
           az network vnet delete --resource-group "$(resourceGroupName)" --name "$(vmVNET)" 
           az disk delete --name "$(osDiskName)" --resource-group "$(resourceGroupName)" --yes
           az disk delete --name "$(dataDiskName)" --resource-group "$(resourceGroupName)" --yes
+
+- stage: Delete_blobs
+  jobs:
+  - job:
+    steps:
+     - task: AzureCLI@2
+       inputs:
+         azureSubscription: 'AzureServiceConnection'
+         scriptType: pscore
+         scriptLocation: inlineScript
+         inlineScript: 
+          az storage blob delete-batch --source "$(containerName)" --account-name "$(storageAccount)" --sas-token "$(token)"
