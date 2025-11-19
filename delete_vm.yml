@@ -29,7 +29,7 @@ variables:
   containerName: "snapshot"
 
 stages:
-- stage: Provision
+- stage: Delete_vm
   jobs:
   - job:
     steps:
