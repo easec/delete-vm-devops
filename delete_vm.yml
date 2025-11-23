@@ -62,6 +62,5 @@ stages:
          scriptType: pscore
          scriptLocation: inlineScript
          inlineScript: 
-          az storage blob delete-batch --source "$(containerName)" --account-name "$(storageAccount)" --sas-token "$(token)"
-          echo
+          az storage blob delete-batch --source "$(containerName)" --account-name "$(storageAccount)" --sas-token "$(token)";
           az storage container delete --account-name "$(storageAccount)" --sas-token "$(token)" --name "$(containerName)"
