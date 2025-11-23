@@ -52,7 +52,7 @@ stages:
           az disk delete --name "$(osDiskName)" --resource-group "$(resourceGroupName)" --yes
           az disk delete --name "$(dataDiskName)" --resource-group "$(resourceGroupName)" --yes
 
-- stage: Delete_blobs
+- stage: Delete_blobs_and_container
   jobs:
   - job:
     steps:
@@ -62,4 +62,5 @@ stages:
          scriptType: pscore
          scriptLocation: inlineScript
          inlineScript: 
-          az storage blob delete-batch --source "$(containerName)" --account-name "$(storageAccount)" --sas-token "$(token)"
+          az storage blob delete-batch --source "$(containerName)" --account-name "$(storageAccount)" --sas-token "$(token)" 
+          az storage container-rm delete --storage-account "$(storageAccount)" --name "$(containerName)" --yes
