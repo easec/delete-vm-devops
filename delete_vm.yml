@@ -4,9 +4,17 @@
 # The following variables need to be provided to the pipeline:
 # - resourceGroupName            : name for the Resource Group where the vm will be created.
 # - virtualMachineName           : name for the virtual machine.
+# - vmNIC                        : Name for NIC.
+# - vmNSG                        : Name for NSG.
+# - vmVNET                        : Name for VNET
 # - osDiskName                   : Name for Managed Disk containing the OS.
 # - dataDiskName                 : Name for Managed Disk containing the data.
-#
+# - subecriptionId               : ID for subscription.
+# - token                        : Token for container (snapshot). Secret
+# - tokenSA                      : Token for Storage account. Secret
+# - containerName                : Name for container.
+# - storageAccount               : Name for Storage account,
+
 # This pipeline also expects an Azure (Resource Manager) service connection in Azure DevOps with the name 'AzureServiceConnection'.
 
 
