@@ -63,4 +63,4 @@ stages:
          scriptLocation: inlineScript
          inlineScript: 
           az storage blob delete-batch --source "$(containerName)" --account-name "$(storageAccount)" --sas-token "$(token)" 
-          az storage container-rm delete --storage-account "$(storageAccount)" --name "$(containerName)" --yes
+          az storage container-rm delete --storage-account "$(storageAccount)" --name "$(containerName)"
